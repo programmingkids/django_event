@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% load bootstrap4 %}
+
+{% block title%}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 p-2 bg-primary text-white">{{ title }}</h2>
+    
+    <div class="mb-3">
+        <a href="{% url 'event:event_list' %}" class="btn btn-primary">一覧に戻る</a>
+    </div>
+    
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>イベント名</th>
+                <th>定員</th>
+                <th>カテゴリ</th>
+                <th>主催者</th>
+                <th>新規登録日時</th>
+                <th>更新日時</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{object.id}}</td>
+                <td>{{object.name}}</td>
+                <td>{{object.number}}</td>
+                <td>{{object.category.name}}</td>
+                <td>{{object.user.username}}</td>
+                <td>{{object.created_at|date:'Y年m月j日H時i分s秒'}}</td>
+                <td>{{object.modified_at|date:'Y年m月j日H時i分s秒'}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">現在の参加者数</div>
+        <div class="card-body">
+            <p class="card-text">{{object.eventusers|length}}人</p>
+        </div>
+    </div>
+
+    <hr>
+    
+    <h4 class="mb-4 p-2 bg-success text-white">イベント参加者</h4>
+    
+    <table class="table table-bordered table-hover mb-3">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>ユーザ名</th>
+                <th>メールアドレス</th>
+                <th>新規登録日時</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eventuser in object.eventusers %}
+            <tr>
+                <td>{{eventuser.user.id}}</td>
+                <td>{{eventuser.user.username}}</td>
+                <td>{{eventuser.user.email}}</td>
+                <td>{{eventuser.created_at|date:'Y年m月j日H時i分s秒'}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>    
+    
+    <div class="mb-5 px-4 d-flex align-items-center justify-content-center">
+        {% if is_attended %}
+            <a href="{% url 'event:eventuser_delete' object.id %}" 
+               class="btn btn-lg btn-danger mr-5">イベントから辞退</a>
+            <a href="{% url 'event:chat_talk' object.id %}" 
+               class="btn btn-lg btn-success ml-5">チャット</a>
+        {% else %}
+            <a href="{% url 'event:eventuser_create' object.id %}" 
+               class="btn btn-lg btn-primary">イベントに参加</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
