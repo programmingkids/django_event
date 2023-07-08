@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load bootstrap4 %}
+
+{% block title%}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 p-2 bg-primary text-white">{{ title }}</h2>
+    
+    <div class="mb-3">
+        <a href="{% url 'event:event_list' %}" class="btn btn-primary">一覧に戻る</a>
+    </div>
+    
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>ID</th>
+                <th>イベント名</th>
+                <th>定員</th>
+                <th>カテゴリ</th>
+                <th>主催者</th>
+                <th>新規登録日時</th>
+                <th>更新日時</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{object.id}}</td>
+                <td>{{object.name}}</td>
+                <td>{{object.number}}</td>
+                <td>{{object.category.name}}</td>
+                <td>{{object.user.username}}</td>
+                <td>{{object.created_at|date:'Y年m月j日H時i分s秒'}}</td>
+                <td>{{object.modified_at|date:'Y年m月j日H時i分s秒'}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="card mb-3">
+        <div class="card-header bg-primary text-white">現在の参加者数</div>
+        <div class="card-body">
+            <p class="card-text">人</p>
+        </div>
+    </div>
+
+    <hr>
+    
+    <h4 class="mb-4 p-2 bg-success text-white">イベント参加者</h4>
+    
+
+</div>
+{% endblock %}
